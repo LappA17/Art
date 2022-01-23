@@ -1,5 +1,13 @@
 const modals = () => {
-    function bindModal(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
+
+    /* Если пользователь долистал страницу до конца, но не нажал ни одну кнопку - должно появляться модальное окно (popup-gift)
+     и сам подарок полностью исчезает со страницы. При нажатии на крестик или подложку окно исчезает. */
+     let btnPressed; //изначально андефайн (false), создаем для того что бы мониторить была ли нажата кнопка
+
+
+    function bindModal(triggerSelector, modalSelector, closeSelector, destroy = false) { /* удаляем closeClickOverlay = true
+        так как нам нужно уничтожать триггер мод окна, то-есть после того как человек нажимает на гиф(там где подарок), моделька с 
+        подарков должна пропасть */
         const trigger = document.querySelectorAll(triggerSelector),
               modal = document.querySelector(modalSelector),
               close = document.querySelector(closeSelector),
@@ -12,8 +20,21 @@ const modals = () => {
                     e.preventDefault();
                 }
 
+                btnPressed = true; // Пользователь кликнул на мод окно
+
+                /* То-есть если есть дестрой, то мы просто удалем триггер (айтем = тригер) */
+                if (destroy) {
+                    item.remove();
+                }
+
                 windows.forEach(item => {
                     item.style.display = 'none';
+
+                    /* В самом конце урока Ваня сказал что хочет работать с css анимации в этом проекте. И теперь когда мы 
+                    кликнем на какой-то триггер к нам во все модельные окна добавятся вот эти классы ("animated", "fadeIn")
+                    и теперь мод окна будут появляться плавно */
+                    item.classList.add("animated", "fadeIn");
+
                 });
     
                 modal.style.display = "block";
@@ -34,7 +55,7 @@ const modals = () => {
         });
 
         modal.addEventListener('click', (e) => {
-            if (e.target === modal && closeClickOverlay) {
+            if (e.target === modal) { //  && closeClickOverlay удаляем
                 windows.forEach(item => {
                     item.style.display = 'none';
                 });
@@ -46,28 +67,24 @@ const modals = () => {
             }
         });
     }
-    /* Нам нужно передать условие что если хоть одно мод окно у нас показывается, то новое не появляется уже
-    По дефолту display - сейчас андефайнд(false) и мы не можем к ней обратиться.
-    Мы находимся внутри функции и не можем обратиться к переменной windows !!! */
     function showModalByTime(selector, time) {
         setTimeout(function() {
-            let display;//добавляем новую переменную
+            let display;
 
-            document.querySelectorAll('[data-modal]').forEach(item => { /* Благодаря этому коду мы будет проходится по каждому модельому
-                окну и вычеслять показывается ли оно пользователю или нет */
+            document.querySelectorAll('[data-modal]').forEach(item => {
                 
-                if (getComputedStyle(item).display !== 'none') {/*будем сравнивать НЕ ПРИ ПОМОЩИ ИНЛАЙН СТИЛЕЙ, А ПРИ ПОМОЩИ СКОМПИНИРОВАННЫХ 
-                    СТИЛЕЙ В БРАУЗЕРЕ, ЭТО ЗНАЧИТ ЧТО СТИЛИ НУЖНО ПОЛУЧАТЬ С БРАУЗЕРА С computed. Item - каждое мод окно, которое мы 
-                    проверям по getCompStyle. Если у нас мод окно которая сейчас перебирается, оно будет показанно пользоателю - мы 
-                    что-то сделаем */
+                if (getComputedStyle(item).display !== 'none') {
                     
-                    display = "block"; /* Теперь в логическом контексте у нас дисплей становится true. И мы точно будем знать что одно из мод окон
-                    показывается  */
+                    display = "block";
                 }
 
-                if(!display) { /* Если не одно мод окно не показывается, то мы берем и показываем мод окно которое нам нужно */
+                if(!display) { 
                     document.querySelector(selector).style.display = 'block';
                     document.body.style.overflow = "hidden";
+                    scroll = calcScroll();
+                    document.body.style.marginRight = `${scroll}px`; // подставляем сюда скрол !
+                    /* Но все равно будет мод окно дергаться, потому что эта функция находится внутри setTimeout и скролл в ней
+                    просто не существует. По-этому копируем переменную scroll = calcScroll(); так как к этой функции доступ уже есть */
                 }
 
             });
@@ -91,13 +108,45 @@ const modals = () => {
        
     }
 
+    function openByScroll(selector) { /*во внутрь передаем селектор который нужно показать если происходит какое-то условие */
+        window.addEventListener('scroll', () => { /* что бы мониторить сколько пользователь уже отлистал на странице */
+
+            /* Сейчас, перед концом урока, Ваня сказал, что многие браузеры старые не поддерживают document.documentElement.scrollHeight
+            по-этому в идеале нам нужно было бы проверить этот код вот таким обаразом */
+            let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+            /* А всё дело в том что некоторые браузеры не поддерживаю документЕлемент, а поддерживают именно body.
+            И теперь там где будет больше (там где documentElement или body) то и вернется в нашу переменную
+            И мы просто подставляем вместо document.documentElement.scrollHeight в условие, переменую scrollHeight
+             */
+
+            if(!btnPressed &&  (window.pageYOffset + document.documentElement.clientHeight >= scrollHeight)) {
+/* Если кнопка не нажата и пользователь долистал страницу до конца
+window.pageYOffset - еслии я немного пролистаю страницу, и весь тот контент что находится сверху = это pageYOffset, то что не видно
+
+clientHeight - это контент который в данную секунду внезависимо какой скрол показывается пользователю
+
+и когда мы пролистаем в самый низ - то весь pageYOffset который мы уже невидим + тот контент который показывается в данную секунду
+и будут равны полной высоте
+
+document.documentElement.clientHeight - используем контент который виден пользователю
+
+и что бы убедиться что пользователь долистал страницу мы должны вот эту суму window.pageYOffSet + document.documentElement.clientHeight
+сравнить с полной высотой страницы */
+
+                document.querySelector(selector).click(); /* Теперь нужно вручную вызвать модельное окно подарка. И вызываем мы
+ его в РУЧНУЮ, когда мы пишем .click то мы как буд-то вызвали само модельное окно            */
+            } 
+        });
+    }
+
     bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
     bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-    /*Подставляем нужыне нам селекторы с верстки (кнопка открытия, само мод окно, закрытие окна)
-        
-    Верстальщик уже до нас поставил data атрибуты*/
+    bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+    /* Передаем true для destroy*/
+
+    openByScroll('.fixed-gift');
     
-    showModalByTime('.popup-consultation', 5000);
-};
+    //showModalByTime('.popup-consultation', 5000);
+ };
 
 export default modals;
