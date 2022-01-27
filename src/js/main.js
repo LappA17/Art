@@ -4,6 +4,7 @@ import forms from "./modules/forms";
 import mask from "./modules/mask";
 import checkTextInputs from "./modules/checkTextInputs";
 import showMoreStyles from "./modules/showMoreStyles";
+import calc from "./modules/calc";
 
 /* прописываем npm i json-server 
 
@@ -20,5 +21,5 @@ window.addEventListener("DOMContentLoaded", () => {
     checkTextInputs('[name="name"]'); 
     checkTextInputs('[name="message"]');
     showMoreStyles('.button-styles', '#styles .row');
-    /* теперь вместо стилей передаем селектор той обертки куда мы все это помещаем */
+    calc('#size', '#material', '#options', '.promocode', '.calc-price');
 });
