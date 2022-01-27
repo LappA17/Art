@@ -3,6 +3,7 @@ import sliders from "./modules/sliders";
 import forms from "./modules/forms";
 import mask from "./modules/mask";
 import checkTextInputs from "./modules/checkTextInputs";
+import showMoreStyles from "./modules/showMoreStyles";
 
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -15,4 +16,5 @@ window.addEventListener("DOMContentLoaded", () => {
     mask('[name="phone"]'); //на нужно подставлять маску на телефон
     checkTextInputs('[name="name"]'); //инпуты отвечающее за ввод имени
     checkTextInputs('[name="message"]');//сообщение
+    showMoreStyles('.button-styles', '.styles-2');
 });
