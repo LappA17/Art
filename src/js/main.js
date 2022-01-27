@@ -5,6 +5,9 @@ import mask from "./modules/mask";
 import checkTextInputs from "./modules/checkTextInputs";
 import showMoreStyles from "./modules/showMoreStyles";
 
+/* прописываем npm i json-server 
+
+Вырезаем с forms функцию post-data*/
 
 window.addEventListener("DOMContentLoaded", () => {
     "use strict";
@@ -13,8 +16,9 @@ window.addEventListener("DOMContentLoaded", () => {
     sliders('.feedback-slider-item', "horizontal", '.main-prev-btn', '.main-next-btn'); 
     sliders(".main-slider-item", "vertical");
     forms();
-    mask('[name="phone"]'); //на нужно подставлять маску на телефон
-    checkTextInputs('[name="name"]'); //инпуты отвечающее за ввод имени
-    checkTextInputs('[name="message"]');//сообщение
-    showMoreStyles('.button-styles', '.styles-2');
+    mask('[name="phone"]');
+    checkTextInputs('[name="name"]'); 
+    checkTextInputs('[name="message"]');
+    showMoreStyles('.button-styles', '#styles .row');
+    /* теперь вместо стилей передаем селектор той обертки куда мы все это помещаем */
 });
