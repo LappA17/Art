@@ -6,10 +6,8 @@ import checkTextInputs from "./modules/checkTextInputs";
 import showMoreStyles from "./modules/showMoreStyles";
 import calc from "./modules/calc";
 import filter from "./modules/filter";
+import pictureSize from "./modules/pictureSize";
 
-/* прописываем npm i json-server 
-
-Вырезаем с forms функцию post-data*/
 
 window.addEventListener("DOMContentLoaded", () => {
     "use strict";
@@ -24,4 +22,5 @@ window.addEventListener("DOMContentLoaded", () => {
     showMoreStyles('.button-styles', '#styles .row');
     calc('#size', '#material', '#options', '.promocode', '.calc-price');
     filter();
+    pictureSize(".sizes-block"); //в этом диве с этим классом находится сама img
 });
