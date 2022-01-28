@@ -903,8 +903,6 @@ h4 {
   border-bottom: 2px dotted #333;
 }
 
-/*Здесь обращаемся к span потому что там есть текст который я хочу стерилизовать.
-Мы использовали в жс класс актив стайл я его пременим для стерилизации наших хедингов*/
 .often-questions p.active-style span {
   color: #E950D7;
   font-weight: 900;
@@ -912,19 +910,33 @@ h4 {
   border: 0;
 }
 
-/* мы с начала обращаемся к хедингу те к заголовку который мы будем тыкать, мы скажем что у этого заголовка есть
-класс active и здесь же мы говорим что за этим активным заголовком есть аккардион блок*/
 .often-questions .accordion-heading.active+.accordion-block{
   display: block;
 }
-/* а здесь напишием дисплей нан, и теперь изначально весь контент в блоках будет скрыт, но как только наш хединг
-получит класс active то сразу аккардион-блок за ним будет показан*/
+
+/* если установить макс высоту на 0 то блок не будет показывать потому что не будет высоты
+opacity 0 что бы был прозрачным
+transition: all 0.3s ease-out; - анимация 
+overflow: hidden; - потому что там баг в верстке с ::before он немного заходит на верстке и при клике чуть ниже не открвается блок*/
 .often-questions .accordion-block {
-  display: none;
-  margin-top: 1rem;
   background-color: #f7e7e6;
-  padding: 3rem 4rem;
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.3s ease-out;
+  overflow: hidden;
+  /*display: none; */
+ /* margin-top: 1rem;*/
+  /*padding: 3rem 4rem;*/
 }
+
+/* этот класс будет отвечать за активный блок, а предыдущий скрывает*/
+.often-questions .accordion-block.active-content {
+  overflow: visible;
+  opacity: 1;
+  padding: 3rem 4rem;
+  margin-top: 1rem
+}
+
 .often-questions .accordion-block:before {
   content: '';
   position: absolute;

@@ -1,47 +1,30 @@
-const accordion = (triggersSelector, itemsSelector ) => { /* в акордион должно приходить два селектора, потому что мы взаимодейсвтуем с двумя
+const accordion = (triggersSelector) => { /* в акордион должно приходить два селектора, потому что мы взаимодейсвтуем с двумя
 типами элементов на странице : 1ое - заголовок(какой-то span ) и под ним есть див - блок в котором находится весь
 контент. Нам нужно получить как тригер при нажатие на который вызывается контент 
 После триггера и айтема пишем селектор потому что сразу внутри я скрою получение всех этих элементов*/
 
-    const btns = document.querySelectorAll(triggersSelector),
-          blocks = document.querySelectorAll(itemsSelector);
-
-    blocks.forEach(block => {
-        block.classList.add("animated", "fadeInDown");
-    });
-
+    const btns = document.querySelectorAll(triggersSelector);
+    
     btns.forEach(btn => {
-        btn.addEventListener("click", function() { /*для того что бы воспользоваться контекстом вызыва внутри обработчика btn я воспользуюсь
-    классической функцией и я буду ссылаться на тот элемент на котором произошло действие  */
+        btn.addEventListener("click", function() { //контекст вызова будет поэтому оставляем анинмуню фцию
+            this.classList.toggle("active-style");/* toggle - работает так : если у элемента нет этого класса то тогл его добавит
+если есть то уберет. Мы кликнули на элемент - он стал розовым */
 
-        /* Теперь нужно узнать является ли тот элемент на который я нажал активным  */
-        if (!this.classList.contains("active")) { /*я обращаюсь к тому элементу на который сейчас кликнули
-И здесь логика такая : если на элемент который нажал пользователь нет класса активности то после его нажатия этому элементу мы добавим
-этот класс а у отсальных уберем */
-            btns.forEach(btn => {
-                btn.classList.remove("active", "active-style");
-            });
-            this.classList.add("active", "active-style"); //а тот на котором действие произошло класс добавляем
-        }
-        /* Здесь обращаемся к span потому что там есть текст который я хочу стерилизовать.
-Мы использовали в жс класс актив стайл я его пременим для стерилизации наших хедингов
-.often-questions p.active-style span {
-    color: #E950D7;
-    font-weight: 900;
-    text-decoration: none;
-    border: 0;
-  }
-  
-  /* мы с начала обращаемся к хедингу те к заголовку который мы будем тыкать, мы скажем что у этого заголовка есть
-  класс active и здесь же мы говорим что за этим активным заголовком есть аккардион блок
-  .often-questions .accordion-heading.active+.accordion-block{
-    display: block;
-  }
-  /* а здесь напишием дисплей нан, и теперь изначально весь контент в блоках будет скрыт, но как только наш хединг
-  получит класс active то сразу аккардион-блок за ним будет показан
-  .often-questions .accordion-block {
-    display: none; */
+            /* перейдем к стелизации контента после клика на элемент */
+            this.nextElementSibling.classList.toggle("active-content");
+/* this.nextElementSibling - значит я обращаюсь к след элементу соседу */
 
+            /* дальше если нужно узнать а элемент на который нажали уже открыт или еще скрыт */
+            if (this.classList.contains('active-style')) {
+
+                /*так как макс высота стоит в 0, нам нужно с помощью скрипта высчитать его высоту  */
+                this.nextElementSibling.style.maxHeight = this.nextElementSibling.scrollHeight + 80 + "px";
+/*scrollHeight - показывает нам высоту контента которая содержится внутри элемента 
++ 80 - что бы красиво отображалось из-за педдингов которые мы установили в стилях
+и передаем к этому 80 пиксели */
+            } else { 
+                this.nextElementSibling.style.maxHeight = "0px";//сварачиваем элемент
+            }
         });
     });
 
