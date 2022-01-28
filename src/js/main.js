@@ -9,6 +9,12 @@ import filter from "./modules/filter";
 import pictureSize from "./modules/pictureSize";
 import accordion from "./modules/accordion";
 import burger from "./modules/burger";
+import scrolling from "./modules/scrolling";
+
+/* Добавили свг картинку в самый конец кода в хтмл + в css задали стили
+Теперь появился скрол на странице который в секунду позовлят телепортироваться к какомо-ту элементу на страницы
+с помощью уникального индфикатора в href к которому будет перемещение, а именно в ручную прописываем на строке хедеру
+айди ап*/
 
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -27,4 +33,5 @@ window.addEventListener("DOMContentLoaded", () => {
     pictureSize(".sizes-block");
     accordion(".accordion-heading");
     burger(".burger-menu", ".burger");
+    scrolling(".pageup");
 });
