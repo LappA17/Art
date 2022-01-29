@@ -10,12 +10,26 @@ import pictureSize from "./modules/pictureSize";
 import accordion from "./modules/accordion";
 import burger from "./modules/burger";
 import scrolling from "./modules/scrolling";
+import drop from "./modules/drop";
 
-/* Добавили свг картинку в самый конец кода в хтмл + в css задали стили
-Теперь появился скрол на странице который в секунду позовлят телепортироваться к какомо-ту элементу на страницы
-с помощью уникального индфикатора в href к которому будет перемещение, а именно в ручную прописываем на строке хедеру
-айди ап*/
+/* array(1) {
+  ["upload"]=>
+  array(5) {
+    ["name"]=>
+    string(12) "IMG_4460.JPG"
+    ["type"]=>
+    string(10) "image/jpeg"
+    ["tmp_name"]=>
+    string(36) "/Applications/MAMP/tmp/php/phpXkmNSs"
+    ["error"]=>
+    int(0)
+    ["size"]=>
+    int(189019)
+  }
+}  То что приходит после дропа на МАМП сервере , после загрузки
 
+multiple accept="image/*" - прописали в html для инпута на 211 строке что бы четко сказать что мы будем позволять 
+загружать сюда изображение, т-есть image, а * говорит что любые типы картинок, multipe - что много картинок*/
 
 window.addEventListener("DOMContentLoaded", () => {
     "use strict";
@@ -34,4 +48,5 @@ window.addEventListener("DOMContentLoaded", () => {
     accordion(".accordion-heading");
     burger(".burger-menu", ".burger");
     scrolling(".pageup");
+    drop();
 });
