@@ -3,30 +3,11 @@ import { getResource } from "../services/requests";
 const showMoreStyles = (trigger, wrapper) => { 
 
     const btn = document.querySelector(trigger);
-          //cards = document.querySelectorAll(styles), больше не нужен
 
-    /* cards.forEach(card => {
-        card.classList.add('animated', 'fadeInUp');
-    });
+    btn.addEventListener("click", function() {
 
-    btn.addEventListener("click", () => {
-        cards.forEach(card => {
-            card.classList.remove('hidden-lg', 'hidden-md', 'hidden-sm', 'hidden-xs');
-            card.classList.add('col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
-        });
-        
-        btn.remove(); 
-    });
-*/
-
-     btn.addEventListener("click", function() {
-
-        /* здесь можно вместо  http://localhost:3000/styles прописать юрл assets/db.json без сервера напряую
-я до конца не понял почему но как-то связано с gulp . И в createCards(res.styles) что бы получить доступ к стилям*/
-        getResource('http://localhost:3000/styles') //так как вернется промис то через then обработаем
-        .then(res => createCards(res)) /* создаем карточки на основе того ответа который дал нам сервер.
-те сервер нам возвращаем массив(массив с объектами), который мы передаем в функцию createCards.
-item - это каждый отдельный объект внутри массива (те каждая отдельная карточка) */
+        getResource('http://localhost:3000/styles') 
+        .then(res => createCards(res)) 
         .catch(error => console.log(error));
         
         /* теперь сделаем так что бы кнопка удалялась после нажатия
